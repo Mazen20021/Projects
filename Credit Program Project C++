@@ -1,0 +1,274 @@
+# Projects
+#include <iostream>
+#include <cstring>
+#include <conio.h>
+using namespace std;
+int n;
+struct subj{
+    int su_id;
+    string su_name;
+    float su_price;
+    
+};
+struct stud{
+    int stu_id;
+    float stu_money;
+    string stu_name;
+    string sub_subject;
+};
+#define list_students 100
+subj su1[4]={
+        {1 ,    "Programming Languages",          1000},
+   	{2 ,    "Technical Writing",              400},
+   	{3 ,    "Software Engineering",           1000},
+   	{4 ,    "DataBase",                       600},
+};
+stud stu1[list_students];
+subj sub1;
+int Edit();
+int Add();
+int menu();
+int Show();
+int choice;
+int tail=0;
+int search(int id){ 
+           if(id==0){
+           return 0;
+          }
+          for(int i=0; i<list_students; i++){
+          if(stu1[i].stu_id == id &&stu1[i].stu_id != 0){     
+          cout<<"Student Is Found \n"; 
+          cout<<endl;
+          return i;
+          }      
+          } 
+         
+          cout<<"Error this student's ID doesn't exists. \n";
+          cout<<endl;
+          Edit();
+          
+      
+}
+int menu(){
+cout<<"1. Add Student. \n\n";
+cout<<"2. Edit Student.\n\n";
+cout<<"3. Show All Students In System.\n\n\n";
+cout<<"Please Choose One From Above Choices: ";
+cin>>choice;
+cout<<"\n\n";
+return choice;
+}
+int Add(){
+    int size;
+    cout<<"Enter the numbers of students you want to add: ";
+    cin>>size;
+    cout<<endl;
+    if(size==0){
+    return 0;
+    }
+    if(size + tail>list_students){
+        int x;
+        cout<<"Error Your Limit is 100 Student only \n";
+        cout<<endl;
+        cout<<"Do You Want To Try Again ? If Yes Press 1 If No 0: ";
+        cin>>x;
+        cout<<endl;
+        if(x == 1){
+        cout<<endl;
+        Add();
+        }
+        else{
+        cout<<endl;
+        return 0;  
+        }
+        cout<<endl;
+    }
+        int temp_tail = tail; 
+        for(int i =temp_tail ; i<size + temp_tail; i++){
+        int temp;
+	int z = 0;
+        cout<<"Enter the id of a new student: ";
+        cin>>temp;
+        cout<<endl;
+        for(int b=0; b<list_students; b++){
+        if(temp == stu1[b].stu_id){
+        cout<<"Error This ID Already Exists \n";
+        cout<<endl; 
+        cout<<"Please ReEnter New Student ID: ";
+	cin>>temp;
+	cout<<endl;
+        b=-1;
+        }
+        }
+	stu1[i].stu_id = temp;
+        cout<<"Enter the name of a new student: ";
+        cin>>stu1[i].stu_name;
+        cout<<endl;
+        cout<<"Enter the money of a new student: ";
+        cin>>stu1[i].stu_money;
+        cout<<endl;
+        for(int p=0; p<size; p++){
+        int x = 0;
+        x += su1[z-1].su_price;
+        if(stu1[i].stu_money <400){
+        cout<<"Error your fees is less than Minimum of the fees of  any subjects  \n";
+        cout<<endl; //--> Undo
+        cout<<"Please ReEnter Your Fees That Should Not Be Less Than 400: ";
+	cin>>stu1[i].stu_money;
+	cout<<endl;
+        x =0;
+        p =0;
+        }
+        }
+        cout<<"\n\n";
+        cout<<"The available subjects are: \n\n\n";
+   	cout<<"1) Programming Languages.          Fee 1000 L.E \n";
+   	cout<<"2) Technical Writing.              Fee 400  L.E \n";
+   	cout<<"3) Software Engineering.           Fee 1000 L.E\n";
+   	cout<<"4) DataBase.                       Fee 600  L.E\n";
+  	cout<<"\n";
+	cout<<"Enter the Number of Subjects You want to Enroll: ";
+	cin>>n;
+	cout<<endl;
+        int total =0;
+	for(int k=1 ; k<=n; k++){
+	cout<<"Please Enter Subject Number " <<k<< " : ";
+	cin>>z;
+	cout<<endl;
+        total += su1[z-1].su_price;
+        if(total >stu1[i].stu_money){
+        cout<<"Error your fees is less than Total fees of subjects you want to enroll in. \n";
+        cout<<endl;
+	total =0; //--> Undo
+        stu1[i].sub_subject = " ";
+	k=0;
+        n =0;
+        cout<<"Please ReEnter the Number of Subjects You want to Enroll: ";
+	cin>>n;
+	cout<<endl;
+}
+else{
+            if(k == n){
+            stu1[i].sub_subject.append(su1[z-1].su_name); 
+}
+            else{
+            stu1[i].sub_subject.append(su1[z-1].su_name +" , ");
+}
+
+}
+	
+}
+   tail++;
+    
+}
+    return 0;
+}
+int Edit(){
+    float temp_money;
+    int id;
+    int x ; 
+    cout<<"Please Enter ID For A Student To Edit: ";
+    cin>>id;
+    cout<<endl;
+    if(id==0){
+    return 0;
+    }
+    int index = search(id);
+    cout<<"Please Enter Your Student New Name: ";
+    cin>>stu1[index].stu_name;
+    cout<<endl;
+    cout<<"Please Enter Your Student New Available Money: ";
+    cin>>temp_money;//-->  Check Money > Entered else Do Nothing.
+    cout<<endl;
+    if(temp_money > stu1[index].stu_money){
+    stu1[index].stu_money = temp_money;
+    cout<<"Money Has Been Edited to "<<temp_money<<" Successfully \n";
+}
+    else if(temp_money < stu1[index].stu_money){
+    cout<<"Error You Entered money less than " <<stu1[index].stu_money<< " The Money Won't Be Changed \n";  
+    cout<<endl;
+    }
+    cout<<"The Enrolled Subjects are: "<<stu1[index].sub_subject;
+    cout<<endl;
+    cout<<"\n";
+    cout<<"Do You Want To Edit Your Enrolled Subjects ? If Yes Press 1 If No Press Any Key: ";
+    cin>>x;
+    cout<<endl;
+    if(x==1){
+    int z =0;
+    int total =0;
+    stu1[index].sub_subject = " ";
+    cout<<"\n\n";
+    cout<<"The available subjects are: \n\n\n";
+    cout<<"1) Programming Languages.          Fee 1000 L.E \n";
+    cout<<"2) Technical Writing.              Fee 400  L.E \n";
+    cout<<"3) Software Engineering.           Fee 1000 L.E\n";
+    cout<<"4) DataBase.                       Fee 600  L.E\n";
+    cout<<"\n";
+    cout<<"Enter the Number of Subjects You want to Enroll: ";
+    cin>>n;
+    cout<<endl;
+    for(int k=1 ; k<=n; k++){ 
+    cout<<"Please Enter Subject Number " <<k<< " : ";
+    cin>>z;
+    cout<<endl;
+    total += su1[z-1].su_price;
+    if(total >stu1[index].stu_money){
+    cout<<"Error your fees is less than Total fees of subjects you want to enroll in. \n";
+    cout<<endl;
+    total =0; //--> Undo
+    stu1[index].sub_subject = " ";
+    k=0;
+    n =0;
+    cout<<"Please ReEnter the Number of Subjects You want to Enroll: ";
+    cin>>n;
+    cout<<endl;   
+    cout<<"Editing is Done Successfully \n";
+    cout<<endl;
+    
+}
+    else{
+        if(k == n){
+           stu1[index].sub_subject.append(su1[z-1].su_name); 
+        }
+        else{
+            stu1[index].sub_subject.append(su1[z-1].su_name +" , ");
+        }
+
+}
+}
+}
+
+else{
+cout<<"Editing is Done Successfully \n";
+cout<<endl;
+return 0;
+}
+return 0;
+}
+
+int Show(){
+    cout<<"                                 .:Students registered in application:.         \n\n\n";
+    cout<<"Summary of students registered in system:   \n";
+    cout<<endl;
+    for(int i =0; i<tail; i++){
+    cout<<i + 1<<" ) Name is: "<<stu1[i].stu_name<<" , and ID is: "<<stu1[i].stu_id<<" , and Subjects Enrolled are: ("<<stu1[i].sub_subject<<") ";
+    cout<<endl;
+}
+    cout<<endl;
+    return 0;
+}
+int main(){ 
+    do{
+        choice =menu();
+        switch (choice){
+            case 0: break;
+            case 1: Add(); break;
+            case 2: Edit(); break;
+            case 3: Show(); break;
+            default: cout<<"Please Choose a Number from the menu \n";
+            break;
+        }
+    }            
+                while(choice !=0 );
+}
